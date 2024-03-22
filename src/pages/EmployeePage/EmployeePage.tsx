@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   EmployeeData,
+  deleteEmployeeById,
   getEmployeeById,
 } from "../../services/employee-services";
 import styles from "./EmployeePage.module.scss";
@@ -10,6 +11,8 @@ const EmployeePage = () => {
   const pathVariables = useParams();
   const id = pathVariables.id;
   const [employee, setEmployee] = useState<EmployeeData | null>(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (id === undefined) {
@@ -21,6 +24,14 @@ const EmployeePage = () => {
     });
   }, []);
 
+  const handleDelete = () => {
+    if (id !== undefined)
+      deleteEmployeeById(id).then((response) => {
+        console.log(response);
+        navigate("/");
+      });
+  };
+
   return (
     <main>
       <header className={styles.header}>
@@ -29,7 +40,7 @@ const EmployeePage = () => {
       </header>
       <section className={styles.button_row}>
         <button>Edit</button>
-        <button>Delete</button>
+        <button onClick={handleDelete}>Delete</button>
       </section>
       <section className={styles.profile}>
         <h2>Personal Information</h2>
