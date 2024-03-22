@@ -37,3 +37,17 @@ export const getEmployeeById = async (
   const data = await response.json();
   return data;
 };
+
+export const deleteEmployeeById = async (
+  employeeId: string
+): Promise<number> => {
+  const response = await fetch(
+    `http://localhost:8080/employees/${employeeId}`,
+    { method: "DELETE" }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to delete employee");
+  }
+  return response.status;
+};
