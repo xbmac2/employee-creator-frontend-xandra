@@ -1,0 +1,11 @@
+.form {
+  padding: 2rem;
+  & div {
+    padding: 0.5rem;
+  }
+  & label {
+    display: block;
+    font-weight: bold;
+    font-size: 1.17em;
+  }
+}
