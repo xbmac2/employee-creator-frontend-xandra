@@ -1,0 +1,12 @@
+.header {
+  min-height: 320px;
+  background-color: lightgray;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  margin-bottom: 58px;
+
+  & * {
+    padding: 2rem;
+  }
+}

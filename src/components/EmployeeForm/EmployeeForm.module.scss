@@ -1,0 +1,22 @@
+.form {
+  padding: 2rem;
+  & div {
+    padding: 0.5rem;
+  }
+  & label {
+    display: block;
+    font-weight: bold;
+    font-size: 1.17em;
+  }
+
+  & span {
+    display: flex;
+    flex-direction: row;
+
+    & label {
+      padding-left: 15px;
+      font-weight: normal;
+      font-size: 1em;
+    }
+  }
+}

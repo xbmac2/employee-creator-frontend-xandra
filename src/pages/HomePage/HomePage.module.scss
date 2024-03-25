@@ -1,0 +1,17 @@
+.header {
+  background-color: lightgray;
+
+  & * {
+    padding: 2rem;
+    margin-top: 0;
+  }
+}
+
+.button_row {
+  padding: 0.5rem 2rem;
+  display: flex;
+  justify-content: right;
+  & * {
+    margin: 0px 5px;
+  }
+}

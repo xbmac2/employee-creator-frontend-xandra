@@ -1,0 +1,11 @@
+.footer {
+  margin-top: 58px;
+  background-color: lightgray;
+  height: 130px;
+  display: flex;
+  flex-direction: column;
+
+  & * {
+    padding: 20px;
+  }
+}
