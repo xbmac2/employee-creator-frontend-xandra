@@ -8,7 +8,7 @@ export interface EmployeeData {
   hoursPerWeek: number;
   isOngoing: boolean;
   lastName: string;
-  middleName: string | null;
+  middleName?: string | null;
   mobileNumber: string;
   startDate: string;
 }

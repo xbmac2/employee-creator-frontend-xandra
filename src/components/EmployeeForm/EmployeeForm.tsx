@@ -1,16 +1,39 @@
 import { useForm } from "react-hook-form";
 import styles from "./EmployeeForm.module.scss";
-import { addNewEmployee } from "../../services/employee-services";
+import { EmployeeData, addNewEmployee } from "../../services/employee-services";
 import { useNavigate } from "react-router-dom";
 
 const EmployeeForm = () => {
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset } = useForm({
+    defaultValues: {
+      firstName: "",
+      middleName: null,
+      lastName: "",
+      email: "",
+      mobileNumber: "",
+      address: "",
+      contractType: "",
+      startDate: "",
+      hoursPerWeek: 0,
+    },
+  });
+
+  const removeEmptyFields = (
+    data: Partial<EmployeeData>
+  ): Partial<EmployeeData> => {
+    Object.keys(data).forEach((key) => {
+      if (data[key] === "") delete data[key];
+    });
+    return data;
+  };
+
   const navigate = useNavigate();
 
   //data should be type EmployeeData from interface
-  const submitEmployeeForm = (data) => {
+  const submitEmployeeForm = (data: Partial<EmployeeData>) => {
     reset();
-    console.log(data);
+    const cleanedData = removeEmptyFields(data);
+    console.log(cleanedData);
     addNewEmployee(data)
       .then((response) => {
         console.log(response);
@@ -27,8 +50,7 @@ const EmployeeForm = () => {
       </div>
       <div>
         <label htmlFor="middleNameInput">Middle name</label>
-        <input type="text" id="middleNameInput" />
-        {/* {...register("middleName")} */}
+        <input type="text" id="middleNameInput" {...register("middleName")} />
       </div>
       <div>
         <label htmlFor="lastNameInput">Last name</label>
@@ -75,7 +97,7 @@ const EmployeeForm = () => {
 
       <div>
         <label>Start date:</label>{" "}
-        <input type="text" {...register("startDate")} />
+        <input type="date" {...register("startDate")} />
       </div>
 
       <div>
@@ -88,7 +110,7 @@ const EmployeeForm = () => {
         <input
           type="number"
           id="hoursPerWeekInput"
-          {...register("hoursPerWeek")}
+          {...register("hoursPerWeek", { valueAsNumber: true })}
         />
       </div>
 
