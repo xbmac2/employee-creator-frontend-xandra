@@ -6,16 +6,21 @@ import {
 } from "../../services/employee-services";
 import styles from "./HomePage.module.scss";
 import { useNavigate } from "react-router-dom";
+import Header from "../../components/Header/Header";
 
 const HomePage = () => {
   const [employees, setEmployees] = useState<EmployeeData[] | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    getAllEmployees().then((response) => {
-      console.log(response);
-      setEmployees(response);
-    });
+    getAllEmployees()
+      .then((response) => {
+        console.log(response);
+        setEmployees(response);
+      })
+      .catch((e) => {
+        console.log(e.message);
+      });
   }, []);
 
   const handleAddEmployee = () => {
@@ -24,9 +29,7 @@ const HomePage = () => {
 
   return (
     <main>
-      <header className={styles.header}>
-        <h1>Employees List</h1>
-      </header>
+      <Header title="Employees List" hasBackBtn={false} />
       <div className={styles.button_row}>
         <button onClick={handleAddEmployee}>Add Employee</button>
       </div>

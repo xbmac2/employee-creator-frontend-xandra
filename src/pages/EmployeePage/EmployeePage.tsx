@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   EmployeeData,
   deleteEmployeeById,
   getEmployeeById,
 } from "../../services/employee-services";
 import styles from "./EmployeePage.module.scss";
+import Header from "../../components/Header/Header";
 
 const EmployeePage = () => {
   const pathVariables = useParams();
@@ -34,10 +35,7 @@ const EmployeePage = () => {
 
   return (
     <main>
-      <header className={styles.header}>
-        <Link to="/">Back</Link>
-        <h1>Employee Details</h1>
-      </header>
+      <Header title="Employee Details" hasBackBtn={true} />
       <section className={styles.button_row}>
         <button>Edit</button>
         <button onClick={handleDelete}>Delete</button>
