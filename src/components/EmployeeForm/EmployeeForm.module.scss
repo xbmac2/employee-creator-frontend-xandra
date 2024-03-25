@@ -8,4 +8,15 @@
     font-weight: bold;
     font-size: 1.17em;
   }
+
+  & span {
+    display: flex;
+    flex-direction: row;
+
+    & label {
+      padding-left: 15px;
+      font-weight: normal;
+      font-size: 1em;
+    }
+  }
 }

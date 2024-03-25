@@ -51,3 +51,20 @@ export const deleteEmployeeById = async (
   }
   return response.status;
 };
+
+export const addNewEmployee = async (
+  data: Partial<EmployeeData>
+): Promise<EmployeeData> => {
+  const response = await fetch("http://localhost:8080/employees", {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to create employee");
+  }
+  return response.json();
+};
