@@ -1,13 +1,26 @@
 import { useForm } from "react-hook-form";
 import styles from "./EmployeeForm.module.scss";
-import { EmployeeData, addNewEmployee } from "../../services/employee-services";
+import { EmployeeData } from "../../services/employee-services";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const EmployeeForm = () => {
+export interface EmployeeFormProps {
+  employee?: Partial<EmployeeData>;
+  setEmployee?: (value: any) => unknown;
+  btnText: string;
+  submitFunc: (value: Partial<EmployeeData>) => unknown;
+}
+
+const EmployeeForm = ({
+  employee,
+  setEmployee,
+  btnText,
+  submitFunc,
+}: EmployeeFormProps) => {
   //employee schema
   const employeeSchema = z.object({
+    id: z.number().optional(),
     firstName: z.string().min(1, "First name must be at least 1 character"),
     middleName: z.string().nullable(), //.optional(),
     lastName: z.string().min(1, "Last name must be at least 1 character"),
@@ -18,52 +31,101 @@ const EmployeeForm = () => {
     address: z.string().min(1, "Please include an address"),
     contractType: z.string().min(1, "invalid contract type"),
     startDate: z.string(), //.datetime({ offset: false }),
-    endDate: z.string().optional(),
-    hoursPerWeek: z.number().gt(0, "Hours per week must be greater than zero"),
+    finishDate: z.string().optional(),
+    hoursPerWeek: z
+      .number()
+      .gt(0, "Hours per week must be greater than zero")
+      .lte(168, "Invalid hours"),
   });
+
+  const employeeDefaultValues = employee
+    ? {
+        id: employee.id,
+        firstName: employee.firstName,
+        middleName: employee.middleName,
+        lastName: employee.lastName,
+        email: employee.email,
+        mobileNumber: employee.mobileNumber,
+        address: employee.address,
+        contractType: employee.contractType,
+        startDate: employee.startDate
+          ? employee.startDate.substring(0, 10)
+          : "",
+        hoursPerWeek: employee.hoursPerWeek,
+        finishDate: employee.finishDate
+          ? employee.finishDate.substring(0, 10)
+          : "",
+      }
+    : {
+        firstName: "",
+        middleName: null,
+        lastName: "",
+        email: "",
+        mobileNumber: "",
+        address: "",
+        contractType: "",
+        startDate: "",
+        hoursPerWeek: 0,
+        finishDate: "",
+      };
 
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(employeeSchema),
-    defaultValues: {
-      firstName: "",
-      middleName: null,
-      lastName: "",
-      email: "",
-      mobileNumber: "",
-      address: "",
-      contractType: "",
-      startDate: "",
-      hoursPerWeek: 0,
-      finishDate: "",
-    },
+    // defaultValues: {
+    //   firstName: employee.firstName ?? "",
+    //   middleName: employee.middleName ?? null,
+    //   lastName: employee.lastName ?? "",
+    //   email: employee.email ?? "",
+    //   mobileNumber: employee.mobileNumber ?? "",
+    //   address: employee.address ?? "",
+    //   contractType: employee.contractType ?? "",
+    //   startDate: employee.startDate ? employee.startDate.substring(0, 10) : "",
+    //   hoursPerWeek: employee.hoursPerWeek ?? 0,
+    //   finishDate: employee.finishDate
+    //     ? employee.finishDate.substring(0, 10)
+    //     : "",
+    // },
+    defaultValues: employeeDefaultValues,
   });
 
   console.log(errors, "errors");
 
-  const removeEmptyFields = (
+  const nullifyEmptyFields = (
     data: Partial<EmployeeData>
   ): Partial<EmployeeData> => {
+    // Object.keys(data).forEach((key) => {
+    //   if (data[key] === "") delete data[key];
+    // });
     Object.keys(data).forEach((key) => {
-      if (data[key] === "") delete data[key];
+      if (data[key] === "") {
+        data[key] = null;
+      }
     });
+
     return data;
   };
 
   const navigate = useNavigate();
 
-  //data should be type EmployeeData from interface
   const submitEmployeeForm = (data: Partial<EmployeeData>) => {
-    reset();
-    const cleanedData = removeEmptyFields(data);
+    const cleanedData = nullifyEmptyFields(data);
     console.log(cleanedData);
-    addNewEmployee(cleanedData)
-      .then((response) => {
+    // addNewEmployee(cleanedData)
+    //   .then((response) => {
+    //     console.log(response);
+    //     navigate(`/${response.id}`);
+    //   })
+    //   .catch((e) => console.log(e.message));
+    submitFunc(cleanedData)
+      .then((response: EmployeeData) => {
         console.log(response);
+        if (setEmployee) {
+          setEmployee(response);
+        }
         navigate(`/${response.id}`);
       })
       .catch((e) => console.log(e.message));
@@ -154,7 +216,6 @@ const EmployeeForm = () => {
       </div>
 
       <div>
-        {/* max is 168 */}
         <label htmlFor="hoursPerWeekInput">Hours per week:</label>{" "}
         <input
           type="number"
@@ -168,7 +229,7 @@ const EmployeeForm = () => {
       </div>
 
       <div>
-        <button>Submit</button>
+        <button>{btnText}</button>
       </div>
     </form>
   );

@@ -68,3 +68,24 @@ export const addNewEmployee = async (
   }
   return response.json();
 };
+
+export const updateEmployee = async (
+  data: Partial<EmployeeData>
+): Promise<EmployeeData> => {
+  const employeeId = data.id;
+  const response = await fetch(
+    `http://localhost:8080/employees/${employeeId}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to update employee");
+  }
+  return response.json();
+};

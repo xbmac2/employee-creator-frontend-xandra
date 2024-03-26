@@ -17,7 +17,7 @@ const EmployeeCard = ({ employee }: EmployeeCardProps) => {
         <p>{employee.email}</p>
       </span>
       <span>
-        <Link to={`${employee.id}`}>View</Link>
+        <Link to={`/employee/${employee.id}`}>View</Link>
       </span>
     </article>
   );

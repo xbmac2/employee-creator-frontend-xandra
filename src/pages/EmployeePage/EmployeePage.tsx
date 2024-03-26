@@ -4,10 +4,11 @@ import {
   EmployeeData,
   deleteEmployeeById,
   getEmployeeById,
+  updateEmployee,
 } from "../../services/employee-services";
 import styles from "./EmployeePage.module.scss";
 import Header from "../../components/Header/Header";
-import { formatDate } from "../../helpers/employee-detail-formatters";
+import EmployeeForm from "../../components/EmployeeForm/EmployeeForm";
 
 const EmployeePage = () => {
   const pathVariables = useParams();
@@ -38,10 +39,18 @@ const EmployeePage = () => {
     <main>
       <Header title="Employee Details" hasBackBtn={true} />
       <section className={styles.button_row}>
-        <button>Edit</button>
+        {/* <button>Edit</button> */}
         <button onClick={handleDelete}>Delete</button>
       </section>
-      <section className={styles.profile}>
+      {employee && (
+        <EmployeeForm
+          employee={employee}
+          setEmployee={setEmployee}
+          btnText="Update"
+          submitFunc={updateEmployee}
+        />
+      )}
+      {/* <section className={styles.profile}>
         <h2>Personal Information</h2>
         <h3>First name</h3>
         <p>{employee?.firstName}</p>
@@ -70,7 +79,7 @@ const EmployeePage = () => {
           </>
         )}
         <h3>Hours per week:</h3> <p>{employee?.hoursPerWeek}</p>
-      </section>
+      </section> */}
     </main>
   );
 };
