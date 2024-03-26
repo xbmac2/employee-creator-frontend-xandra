@@ -74,6 +74,9 @@ const EmployeeForm = () => {
       <div>
         <label htmlFor="firstNameInput">First name</label>
         <input type="text" id="firstNameInput" {...register("firstName")} />
+        {errors.firstName && (
+          <small className={styles.error}>{errors.firstName.message}</small>
+        )}
       </div>
       <div>
         <label htmlFor="middleNameInput">Middle name</label>
@@ -82,19 +85,31 @@ const EmployeeForm = () => {
       <div>
         <label htmlFor="lastNameInput">Last name</label>
         <input type="text" id="lastNameInput" {...register("lastName")} />
+        {errors.lastName && (
+          <small className={styles.error}>{errors.lastName.message}</small>
+        )}
       </div>
       <h2>Contact details</h2>
       <div>
         <label htmlFor="emailInput">Email</label>
         <input type="text" id="emailInput" {...register("email")} />
+        {errors.email && (
+          <small className={styles.error}>{errors.email.message}</small>
+        )}
       </div>
       <div>
         <label>Mobile number</label>
         <input type="text" {...register("mobileNumber")} />
+        {errors.mobileNumber && (
+          <small className={styles.error}>{errors.mobileNumber.message}</small>
+        )}
       </div>
       <div>
         <label>Residential Address</label>
         <input type="text" {...register("address")} />
+        {errors.address && (
+          <small className={styles.error}>{errors.address.message}</small>
+        )}
       </div>
       <h2>Employee Status</h2>
       <div>
@@ -125,11 +140,17 @@ const EmployeeForm = () => {
       <div>
         <label>Start date:</label>{" "}
         <input type="date" {...register("startDate")} />
+        {errors.startDate && (
+          <small className={styles.error}>{errors.startDate.message}</small>
+        )}
       </div>
 
       <div>
         <label>Finish date:</label>{" "}
         <input type="date" {...register("finishDate")} />
+        {errors.finishDate && (
+          <small className={styles.error}>{errors.finishDate.message}</small>
+        )}
       </div>
 
       <div>
@@ -141,6 +162,9 @@ const EmployeeForm = () => {
           id="hoursPerWeekInput"
           {...register("hoursPerWeek", { valueAsNumber: true })}
         />
+        {errors.hoursPerWeek && (
+          <small className={styles.error}>{errors.hoursPerWeek.message}</small>
+        )}
       </div>
 
       <div>
