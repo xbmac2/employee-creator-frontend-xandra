@@ -2,9 +2,33 @@ import { useForm } from "react-hook-form";
 import styles from "./EmployeeForm.module.scss";
 import { EmployeeData, addNewEmployee } from "../../services/employee-services";
 import { useNavigate } from "react-router-dom";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const EmployeeForm = () => {
-  const { register, handleSubmit, reset } = useForm({
+  //employee schema
+  const employeeSchema = z.object({
+    firstName: z.string().min(1, "First name must be at least 1 character"),
+    middleName: z.string().nullable(), //.optional(),
+    lastName: z.string().min(1, "Last name must be at least 1 character"),
+    email: z.string().email({ message: "Invalid email address" }),
+    mobileNumber: z
+      .string()
+      .min(10, "Mobile number must be at least 10 characters"),
+    address: z.string().min(1, "Please include an address"),
+    contractType: z.string().min(1, "invalid contract type"),
+    startDate: z.string(), //.datetime({ offset: false }),
+    endDate: z.string().optional(),
+    hoursPerWeek: z.number().gt(0, "Hours per week must be greater than zero"),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(employeeSchema),
     defaultValues: {
       firstName: "",
       middleName: null,
@@ -18,6 +42,8 @@ const EmployeeForm = () => {
       finishDate: "",
     },
   });
+
+  console.log(errors, "errors");
 
   const removeEmptyFields = (
     data: Partial<EmployeeData>
@@ -89,7 +115,7 @@ const EmployeeForm = () => {
             id="contract"
             //name="contract_type"
             value="CONTRACT"
-            {...register("contractType")}
+            {...register("contractType", { required: true })}
           ></input>
           <label htmlFor="contract">Contract</label>
         </span>
@@ -111,6 +137,7 @@ const EmployeeForm = () => {
         <label htmlFor="hoursPerWeekInput">Hours per week:</label>{" "}
         <input
           type="number"
+          min="0"
           id="hoursPerWeekInput"
           {...register("hoursPerWeek", { valueAsNumber: true })}
         />
