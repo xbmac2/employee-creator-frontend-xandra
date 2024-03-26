@@ -61,7 +61,7 @@ const EmployeeForm = () => {
     reset();
     const cleanedData = removeEmptyFields(data);
     console.log(cleanedData);
-    addNewEmployee(data)
+    addNewEmployee(cleanedData)
       .then((response) => {
         console.log(response);
         navigate(`/${response.id}`);
