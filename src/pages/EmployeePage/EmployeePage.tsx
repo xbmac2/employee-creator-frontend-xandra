@@ -7,6 +7,7 @@ import {
 } from "../../services/employee-services";
 import styles from "./EmployeePage.module.scss";
 import Header from "../../components/Header/Header";
+import { formatDate } from "../../helpers/employee-detail-formatters";
 
 const EmployeePage = () => {
   const pathVariables = useParams();
@@ -61,10 +62,11 @@ const EmployeePage = () => {
         <p>{employee?.address}</p>
         <h2>Employee Status</h2>
         <h3>Type:</h3> <p>{employee?.contractType}</p>
-        <h3>Start date:</h3> <p>{employee?.startDate}</p>
+        <h3>Start date:</h3> <p>{employee && formatDate(employee.startDate)}</p>
         {employee?.finishDate && (
           <>
-            <h3>Finish date:</h3> <p>{employee?.finishDate}</p>
+            <h3>Finish date:</h3>{" "}
+            <p>{employee && formatDate(employee.finishDate)}</p>
           </>
         )}
         <h3>Hours per week:</h3> <p>{employee?.hoursPerWeek}</p>

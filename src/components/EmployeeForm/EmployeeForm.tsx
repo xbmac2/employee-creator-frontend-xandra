@@ -15,6 +15,7 @@ const EmployeeForm = () => {
       contractType: "",
       startDate: "",
       hoursPerWeek: 0,
+      finishDate: "",
     },
   });
 
@@ -101,7 +102,8 @@ const EmployeeForm = () => {
       </div>
 
       <div>
-        <label>Finish date:</label> <input type="text" />
+        <label>Finish date:</label>{" "}
+        <input type="date" {...register("finishDate")} />
       </div>
 
       <div>
