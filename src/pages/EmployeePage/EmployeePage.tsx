@@ -21,10 +21,12 @@ const EmployeePage = () => {
     if (id === undefined) {
       return;
     }
-    getEmployeeById(id).then((response) => {
-      console.log(response);
-      setEmployee(response);
-    });
+    getEmployeeById(id)
+      .then((response) => {
+        console.log(response);
+        setEmployee(response);
+      })
+      .catch((e) => console.log(e));
   }, []);
 
   const handleDelete = () => {
