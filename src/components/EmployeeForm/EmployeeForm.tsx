@@ -4,6 +4,7 @@ import { EmployeeData } from "../../services/employee-services";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "react-toastify";
 
 export interface EmployeeFormProps {
   employee?: Partial<EmployeeData>;
@@ -33,7 +34,7 @@ const EmployeeForm = ({
         .string({ invalid_type_error: "Select contract type" })
         .min(1, "Contract type is required"),
       startDate: z.coerce.date(),
-      finishDate: z.coerce.date().optional(),
+      finishDate: z.coerce.date().nullable().optional(),
       hoursPerWeek: z
         .number()
         .gt(0, "Hours per week must be greater than zero")
@@ -119,8 +120,12 @@ const EmployeeForm = ({
           setEmployee(response);
         }
         navigate(`/employee/${response.id}`);
+        toast.success("Success");
       })
-      .catch((e) => console.log(e.message));
+      .catch((e) => {
+        console.log(e.message);
+        //toast.error(e.message);
+      });
   };
 
   return (
