@@ -175,7 +175,6 @@ const EmployeeForm = ({
               inputProps={{
                 ref,
                 required: true,
-                autoFocus: true,
               }}
               country={"au"}
               specialLabel={""}
