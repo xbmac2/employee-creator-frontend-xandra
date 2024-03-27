@@ -107,12 +107,11 @@ const EmployeeForm = ({
   };
 
   const navigate = useNavigate();
-  //conditional rendering
+  //conditional rendering by watching radio buttons
   const type = watch("contractType");
 
   const submitEmployeeForm = (data: Partial<EmployeeData>) => {
     const cleanedData = nullifyEmptyFields(data);
-    console.log(cleanedData);
     submitFunc(cleanedData)
       .then((response: EmployeeData) => {
         console.log(response);
@@ -124,7 +123,7 @@ const EmployeeForm = ({
       })
       .catch((e) => {
         console.log(e.message);
-        //toast.error(e.message);
+        toast.error(e.message);
       });
   };
 
@@ -178,10 +177,8 @@ const EmployeeForm = ({
           <input
             type="radio"
             id="permanent"
-            //name="contract_type"
             value="PERMANENT"
             {...register("contractType")}
-            // defaultChecked={!employee}
             onClick={() => unregister("finishDate")}
           ></input>
           <label htmlFor="permanent">Permanent</label>
@@ -190,7 +187,6 @@ const EmployeeForm = ({
           <input
             type="radio"
             id="contract"
-            //name="contract_type"
             value="CONTRACT"
             {...register("contractType", { required: true })}
           ></input>
