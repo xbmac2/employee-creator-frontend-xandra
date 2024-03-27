@@ -29,7 +29,9 @@ const EmployeeForm = ({
       .string()
       .min(10, "Mobile number must be at least 10 characters"),
     address: z.string().min(1, "Please include an address"),
-    contractType: z.string().min(1, "invalid contract type"),
+    contractType: z
+      .string({ invalid_type_error: "Select contract type" })
+      .min(1, "Contract type is required"),
     startDate: z.string(), //.datetime({ offset: false }),
     finishDate: z.string().optional(),
     hoursPerWeek: z
@@ -72,6 +74,8 @@ const EmployeeForm = ({
   const {
     register,
     handleSubmit,
+    watch,
+    unregister,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(employeeSchema),
@@ -126,10 +130,14 @@ const EmployeeForm = ({
         if (setEmployee) {
           setEmployee(response);
         }
-        navigate(`/${response.id}`);
+        navigate(`/employee/${response.id}`);
       })
       .catch((e) => console.log(e.message));
   };
+
+  //conditional rendering
+  const type = watch("contractType");
+
   return (
     <form className={styles.form} onSubmit={handleSubmit(submitEmployeeForm)}>
       <h2>Personal Information</h2>
@@ -183,6 +191,8 @@ const EmployeeForm = ({
             //name="contract_type"
             value="PERMANENT"
             {...register("contractType")}
+            // defaultChecked={!employee}
+            onClick={() => unregister("finishDate")}
           ></input>
           <label htmlFor="permanent">Permanent</label>
         </span>
@@ -196,7 +206,10 @@ const EmployeeForm = ({
           ></input>
           <label htmlFor="contract">Contract</label>
         </span>
-        {/* <input type="text" /> */}
+
+        {errors.contractType && (
+          <small className={styles.error}>{errors.contractType.message}</small>
+        )}
       </div>
 
       <div>
@@ -207,13 +220,15 @@ const EmployeeForm = ({
         )}
       </div>
 
-      <div>
-        <label>Finish date:</label>{" "}
-        <input type="date" {...register("finishDate")} />
-        {errors.finishDate && (
-          <small className={styles.error}>{errors.finishDate.message}</small>
-        )}
-      </div>
+      {type === "CONTRACT" && (
+        <div>
+          <label>Finish date:</label>{" "}
+          <input type="date" {...register("finishDate")} />
+          {errors.finishDate && (
+            <small className={styles.error}>{errors.finishDate.message}</small>
+          )}
+        </div>
+      )}
 
       <div>
         <label htmlFor="hoursPerWeekInput">Hours per week:</label>{" "}
