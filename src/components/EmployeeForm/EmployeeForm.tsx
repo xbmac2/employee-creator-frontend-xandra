@@ -18,27 +18,36 @@ const EmployeeForm = ({
   btnText,
   submitFunc,
 }: EmployeeFormProps) => {
-  //employee schema
-  const employeeSchema = z.object({
-    id: z.number().optional(),
-    firstName: z.string().min(1, "First name must be at least 1 character"),
-    middleName: z.string().nullable(), //.optional(),
-    lastName: z.string().min(1, "Last name must be at least 1 character"),
-    email: z.string().email({ message: "Invalid email address" }),
-    mobileNumber: z
-      .string()
-      .min(10, "Mobile number must be at least 10 characters"),
-    address: z.string().min(1, "Please include an address"),
-    contractType: z
-      .string({ invalid_type_error: "Select contract type" })
-      .min(1, "Contract type is required"),
-    startDate: z.string(), //.datetime({ offset: false }),
-    finishDate: z.string().optional(),
-    hoursPerWeek: z
-      .number()
-      .gt(0, "Hours per week must be greater than zero")
-      .lte(168, "Invalid hours"),
-  });
+  const employeeSchema = z
+    .object({
+      id: z.number().optional(),
+      firstName: z.string().min(1, "First name must be at least 1 character"),
+      middleName: z.string().nullable(), //.optional(),
+      lastName: z.string().min(1, "Last name must be at least 1 character"),
+      email: z.string().email({ message: "Invalid email address" }),
+      mobileNumber: z
+        .string()
+        .min(10, "Mobile number must be at least 10 characters"),
+      address: z.string().min(1, "Please include an address"),
+      contractType: z
+        .string({ invalid_type_error: "Select contract type" })
+        .min(1, "Contract type is required"),
+      startDate: z.coerce.date(),
+      finishDate: z.coerce.date().optional(),
+      hoursPerWeek: z
+        .number()
+        .gt(0, "Hours per week must be greater than zero")
+        .lte(168, "Too many hours"),
+    })
+    .superRefine(({ startDate, finishDate }, ctx) => {
+      if (finishDate && finishDate < startDate) {
+        ctx.addIssue({
+          message: "Finish date cannot be earlier than start date",
+          path: ["finishDate"],
+          code: "custom",
+        });
+      }
+    });
 
   const employeeDefaultValues = employee
     ? {
@@ -79,20 +88,6 @@ const EmployeeForm = ({
     formState: { errors },
   } = useForm({
     resolver: zodResolver(employeeSchema),
-    // defaultValues: {
-    //   firstName: employee.firstName ?? "",
-    //   middleName: employee.middleName ?? null,
-    //   lastName: employee.lastName ?? "",
-    //   email: employee.email ?? "",
-    //   mobileNumber: employee.mobileNumber ?? "",
-    //   address: employee.address ?? "",
-    //   contractType: employee.contractType ?? "",
-    //   startDate: employee.startDate ? employee.startDate.substring(0, 10) : "",
-    //   hoursPerWeek: employee.hoursPerWeek ?? 0,
-    //   finishDate: employee.finishDate
-    //     ? employee.finishDate.substring(0, 10)
-    //     : "",
-    // },
     defaultValues: employeeDefaultValues,
   });
 
@@ -101,9 +96,6 @@ const EmployeeForm = ({
   const nullifyEmptyFields = (
     data: Partial<EmployeeData>
   ): Partial<EmployeeData> => {
-    // Object.keys(data).forEach((key) => {
-    //   if (data[key] === "") delete data[key];
-    // });
     Object.keys(data).forEach((key) => {
       if (data[key] === "") {
         data[key] = null;
@@ -114,16 +106,12 @@ const EmployeeForm = ({
   };
 
   const navigate = useNavigate();
+  //conditional rendering
+  const type = watch("contractType");
 
   const submitEmployeeForm = (data: Partial<EmployeeData>) => {
     const cleanedData = nullifyEmptyFields(data);
     console.log(cleanedData);
-    // addNewEmployee(cleanedData)
-    //   .then((response) => {
-    //     console.log(response);
-    //     navigate(`/${response.id}`);
-    //   })
-    //   .catch((e) => console.log(e.message));
     submitFunc(cleanedData)
       .then((response: EmployeeData) => {
         console.log(response);
@@ -134,9 +122,6 @@ const EmployeeForm = ({
       })
       .catch((e) => console.log(e.message));
   };
-
-  //conditional rendering
-  const type = watch("contractType");
 
   return (
     <form className={styles.form} onSubmit={handleSubmit(submitEmployeeForm)}>
