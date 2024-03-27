@@ -13,11 +13,11 @@ const EmployeeCard = ({ employee }: EmployeeCardProps) => {
         <h3>
           {employee.firstName} {employee.middleName ?? null} {employee.lastName}
         </h3>
-        <p>{employee.contractType} - 10yrs</p>
+        <p>{employee.contractType}</p>
         <p>{employee.email}</p>
       </span>
       <span>
-        <Link to={`${employee.id}`}>View</Link>
+        <Link to={`/employee/${employee.id}`}>View</Link>
       </span>
     </article>
   );

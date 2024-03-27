@@ -9,6 +9,9 @@ export interface EmployeesListProps {
 const EmployeesList = ({ employees }: EmployeesListProps) => {
   return (
     <section className={styles.list}>
+      {employees && employees.length < 1 && (
+        <p>There are no employees to display</p>
+      )}
       {employees ? (
         employees.map((employee) => {
           return <EmployeeCard key={employee.id} employee={employee} />;
