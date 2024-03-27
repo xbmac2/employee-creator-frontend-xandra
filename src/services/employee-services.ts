@@ -1,9 +1,9 @@
 export interface EmployeeData {
   id: number;
   address: string;
-  contractType: string; //change this to the or
+  contractType: string;
   email: string;
-  finishDate: string | null; // dates are strings not Dates?
+  finishDate: string | null;
   firstName: string;
   hoursPerWeek: number;
   lastName: string;
@@ -24,7 +24,6 @@ export const getAllEmployees = async (): Promise<EmployeeData[]> => {
 };
 
 export const getEmployeeById = async (
-  // employeeData: Partial<EmployeeData>
   employeeId: string
 ): Promise<EmployeeData> => {
   const response = await fetch(`http://localhost:8080/employees/${employeeId}`);
