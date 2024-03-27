@@ -14,6 +14,7 @@ const EmployeePage = () => {
   const pathVariables = useParams();
   const id = pathVariables.id;
   const [employee, setEmployee] = useState<EmployeeData | null>(null);
+  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
@@ -26,7 +27,10 @@ const EmployeePage = () => {
         console.log(response);
         setEmployee(response);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        console.log(e.message);
+        setError(e.message);
+      });
   }, []);
 
   const handleDelete = () => {
@@ -40,48 +44,22 @@ const EmployeePage = () => {
   return (
     <main>
       <Header title="Employee Details" hasBackBtn={true} />
-      <section className={styles.button_row}>
-        {/* <button>Edit</button> */}
-        <button onClick={handleDelete}>Delete</button>
-      </section>
       {employee && (
-        <EmployeeForm
-          employee={employee}
-          setEmployee={setEmployee}
-          btnText="Update"
-          submitFunc={updateEmployee}
-        />
+        <section className={styles.button_row}>
+          <button onClick={handleDelete}>Delete</button>
+        </section>
       )}
-      {/* <section className={styles.profile}>
-        <h2>Personal Information</h2>
-        <h3>First name</h3>
-        <p>{employee?.firstName}</p>
-        {employee?.middleName && (
-          <>
-            <h3>Middle name</h3>
-            <p>{employee?.middleName}</p>
-          </>
+      <section className={styles.list_section}>
+        {error && <p className={styles.message}>{error}</p>}
+        {employee && (
+          <EmployeeForm
+            employee={employee}
+            setEmployee={setEmployee}
+            btnText="Update"
+            submitFunc={updateEmployee}
+          />
         )}
-        <h3>Last name</h3>
-        <p>{employee?.lastName}</p>
-        <h2>Contact details</h2>
-        <h3>Email</h3>
-        <p>{employee?.email}</p>
-        <h3>Mobile number</h3>
-        <p>{employee?.mobileNumber}</p>
-        <h3>Residential Address</h3>
-        <p>{employee?.address}</p>
-        <h2>Employee Status</h2>
-        <h3>Type:</h3> <p>{employee?.contractType}</p>
-        <h3>Start date:</h3> <p>{employee && formatDate(employee.startDate)}</p>
-        {employee?.finishDate && (
-          <>
-            <h3>Finish date:</h3>{" "}
-            <p>{employee && formatDate(employee.finishDate)}</p>
-          </>
-        )}
-        <h3>Hours per week:</h3> <p>{employee?.hoursPerWeek}</p>
-      </section> */}
+      </section>
     </main>
   );
 };

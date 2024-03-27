@@ -1,5 +1,4 @@
 import EmployeeForm from "../../components/EmployeeForm/EmployeeForm";
-import styles from "./CreateEmployeePage.module.scss";
 import Header from "../../components/Header/Header";
 import { addNewEmployee } from "../../services/employee-services";
 

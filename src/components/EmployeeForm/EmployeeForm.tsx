@@ -22,7 +22,7 @@ const EmployeeForm = ({
     .object({
       id: z.number().optional(),
       firstName: z.string().min(1, "First name must be at least 1 character"),
-      middleName: z.string().nullable(), //.optional(),
+      middleName: z.string().nullable(),
       lastName: z.string().min(1, "Last name must be at least 1 character"),
       email: z.string().email({ message: "Invalid email address" }),
       mobileNumber: z

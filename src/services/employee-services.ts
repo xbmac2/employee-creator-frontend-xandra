@@ -30,7 +30,7 @@ export const getEmployeeById = async (
   const response = await fetch(`http://localhost:8080/employees/${employeeId}`);
 
   if (!response.ok) {
-    throw new Error("Failed to get employee");
+    throw new Error(`Failed to get employee with id ${employeeId}`);
   }
 
   const data = await response.json();
