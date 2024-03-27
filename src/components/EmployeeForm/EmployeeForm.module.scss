@@ -1,10 +1,11 @@
 .form {
   padding: 2rem;
-  & div {
+  & > div {
     padding: 0.5rem;
 
     & input {
       display: block;
+      //width: 225px;
     }
   }
   & label {

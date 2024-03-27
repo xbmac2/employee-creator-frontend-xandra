@@ -1,10 +1,13 @@
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import styles from "./EmployeeForm.module.scss";
 import { EmployeeData } from "../../services/employee-services";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
+import PhoneInput from "react-phone-input-2";
+//import "react-phone-input-2/lib/semantic-ui.css";
+//import "react-phone-input-2/lib/bootstrap.css";
 
 export interface EmployeeFormProps {
   employee?: Partial<EmployeeData>;
@@ -83,6 +86,7 @@ const EmployeeForm = ({
 
   const {
     register,
+    control,
     handleSubmit,
     watch,
     unregister,
@@ -112,6 +116,7 @@ const EmployeeForm = ({
 
   const submitEmployeeForm = (data: Partial<EmployeeData>) => {
     const cleanedData = nullifyEmptyFields(data);
+    console.log(cleanedData);
     submitFunc(cleanedData)
       .then((response: EmployeeData) => {
         console.log(response);
@@ -158,7 +163,30 @@ const EmployeeForm = ({
       </div>
       <div>
         <label>Mobile number</label>
-        <input type="text" {...register("mobileNumber")} />
+        {/* <input type="text" />
+        <PhoneInput country="au" disableDropdown disableCountryCode /> */}
+        <Controller
+          control={control}
+          name="mobileNumber"
+          rules={{ required: true }}
+          render={({ field: { ref, ...field } }) => (
+            <PhoneInput
+              {...field}
+              inputProps={{
+                ref,
+                required: true,
+                autoFocus: true,
+              }}
+              country={"au"}
+              specialLabel={""}
+              value={employee ? employee.mobileNumber : null}
+              placeholder=""
+              disableDropdown
+              onlyCountries={["au"]}
+              disableCountryCode={true}
+            />
+          )}
+        />
         {errors.mobileNumber && (
           <small className={styles.error}>{errors.mobileNumber.message}</small>
         )}
