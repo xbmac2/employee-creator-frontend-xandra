@@ -6,7 +6,6 @@ export interface EmployeeData {
   finishDate: string | null; // dates are strings not Dates?
   firstName: string;
   hoursPerWeek: number;
-  isOngoing: boolean;
   lastName: string;
   middleName?: string | null;
   mobileNumber: string;
