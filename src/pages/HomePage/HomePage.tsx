@@ -33,8 +33,9 @@ const HomePage = () => {
       <div className={styles.button_row}>
         <button onClick={handleAddEmployee}>Add Employee</button>
       </div>
-
-      <EmployeesList employees={employees} />
+      <div>
+        <EmployeesList employees={employees} />
+      </div>
     </main>
   );
 };

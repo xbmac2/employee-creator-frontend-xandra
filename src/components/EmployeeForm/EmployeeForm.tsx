@@ -6,8 +6,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 import PhoneInput from "react-phone-input-2";
-//import "react-phone-input-2/lib/semantic-ui.css";
-//import "react-phone-input-2/lib/bootstrap.css";
+import AddressInputC from "../AddressInput/AddressInputC";
 
 export interface EmployeeFormProps {
   employee?: Partial<EmployeeData>;
@@ -162,9 +161,8 @@ const EmployeeForm = ({
         )}
       </div>
       <div>
-        <label>Mobile number</label>
-        {/* <input type="text" />
-        <PhoneInput country="au" disableDropdown disableCountryCode /> */}
+        <label htmlFor="mobileNumberInput">Mobile number</label>
+
         <Controller
           control={control}
           name="mobileNumber"
@@ -174,7 +172,6 @@ const EmployeeForm = ({
               {...field}
               inputProps={{
                 ref,
-                required: true,
               }}
               country={"au"}
               specialLabel={""}
@@ -191,15 +188,18 @@ const EmployeeForm = ({
         )}
       </div>
       <div>
-        <label>Residential Address</label>
-        <input type="text" {...register("address")} />
+        <label htmlFor="addressInput">Residential Address</label>
+
+        {employee && <p>{employee.address}</p>}
+        <AddressInputC control={control} name="address" />
+
         {errors.address && (
           <small className={styles.error}>{errors.address.message}</small>
         )}
       </div>
       <h2>Employee Status</h2>
       <div>
-        <label>Type:</label>
+        <label htmlFor="contractType">Type:</label>
         <span>
           <input
             type="radio"
@@ -226,7 +226,7 @@ const EmployeeForm = ({
       </div>
 
       <div>
-        <label>Start date:</label>{" "}
+        <label htmlFor="startDate">Start date:</label>{" "}
         <input type="date" {...register("startDate")} />
         {errors.startDate && (
           <small className={styles.error}>{errors.startDate.message}</small>
@@ -235,7 +235,7 @@ const EmployeeForm = ({
 
       {type === "CONTRACT" && (
         <div>
-          <label>Finish date:</label>{" "}
+          <label htmlFor="finishDate">Finish date:</label>{" "}
           <input type="date" {...register("finishDate")} />
           {errors.finishDate && (
             <small className={styles.error}>{errors.finishDate.message}</small>
