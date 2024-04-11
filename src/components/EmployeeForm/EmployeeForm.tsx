@@ -4,6 +4,7 @@ import { EmployeeData } from "../../services/employee-services";
 import { useNavigate } from "react-router-dom";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "react-toastify";
 
 export interface EmployeeFormProps {
   employee?: Partial<EmployeeData>;
@@ -33,7 +34,7 @@ const EmployeeForm = ({
         .string({ invalid_type_error: "Select contract type" })
         .min(1, "Contract type is required"),
       startDate: z.coerce.date(),
-      finishDate: z.coerce.date().optional(),
+      finishDate: z.coerce.date().nullable().optional(),
       hoursPerWeek: z
         .number()
         .gt(0, "Hours per week must be greater than zero")
@@ -106,12 +107,11 @@ const EmployeeForm = ({
   };
 
   const navigate = useNavigate();
-  //conditional rendering
+  //conditional rendering by watching radio buttons
   const type = watch("contractType");
 
   const submitEmployeeForm = (data: Partial<EmployeeData>) => {
     const cleanedData = nullifyEmptyFields(data);
-    console.log(cleanedData);
     submitFunc(cleanedData)
       .then((response: EmployeeData) => {
         console.log(response);
@@ -119,8 +119,12 @@ const EmployeeForm = ({
           setEmployee(response);
         }
         navigate(`/employee/${response.id}`);
+        toast.success("Success");
       })
-      .catch((e) => console.log(e.message));
+      .catch((e) => {
+        console.log(e.message);
+        toast.error(e.message);
+      });
   };
 
   return (
@@ -173,10 +177,8 @@ const EmployeeForm = ({
           <input
             type="radio"
             id="permanent"
-            //name="contract_type"
             value="PERMANENT"
             {...register("contractType")}
-            // defaultChecked={!employee}
             onClick={() => unregister("finishDate")}
           ></input>
           <label htmlFor="permanent">Permanent</label>
@@ -185,7 +187,6 @@ const EmployeeForm = ({
           <input
             type="radio"
             id="contract"
-            //name="contract_type"
             value="CONTRACT"
             {...register("contractType", { required: true })}
           ></input>

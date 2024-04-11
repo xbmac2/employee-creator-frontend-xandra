@@ -7,6 +7,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import EmployeePage from "./pages/EmployeePage/EmployeePage";
 import CreateEmployeePage from "./pages/CreateEmployeePage/CreateEmployeePage";
 import Footer from "./components/Footer/Footer";
+import { ToastContainer, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   return (
     <>
@@ -18,6 +21,19 @@ function App() {
           <Route path="/new-employee" element={<CreateEmployeePage />} />
         </Routes>
         <Footer />
+        <ToastContainer
+          position="bottom-right"
+          autoClose={4500}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable={false}
+          pauseOnHover
+          theme="light"
+          transition={Slide}
+        />
       </BrowserRouter>
     </>
   );

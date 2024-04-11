@@ -7,6 +7,7 @@ import {
 import styles from "./HomePage.module.scss";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header/Header";
+import { toast } from "react-toastify";
 
 const HomePage = () => {
   const [employees, setEmployees] = useState<EmployeeData[] | null>(null);
@@ -15,11 +16,10 @@ const HomePage = () => {
   useEffect(() => {
     getAllEmployees()
       .then((response) => {
-        console.log(response);
         setEmployees(response);
       })
       .catch((e) => {
-        console.log(e.message);
+        toast.error(e.message);
       });
   }, []);
 

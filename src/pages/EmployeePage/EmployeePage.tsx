@@ -9,6 +9,7 @@ import {
 import styles from "./EmployeePage.module.scss";
 import Header from "../../components/Header/Header";
 import EmployeeForm from "../../components/EmployeeForm/EmployeeForm";
+import { toast } from "react-toastify";
 
 const EmployeePage = () => {
   const pathVariables = useParams();
@@ -24,21 +25,23 @@ const EmployeePage = () => {
     }
     getEmployeeById(id)
       .then((response) => {
-        console.log(response);
         setEmployee(response);
       })
       .catch((e) => {
-        console.log(e.message);
         setError(e.message);
       });
   }, []);
 
   const handleDelete = () => {
     if (id !== undefined)
-      deleteEmployeeById(id).then((response) => {
-        console.log(response);
-        navigate("/");
-      });
+      deleteEmployeeById(id)
+        .then(() => {
+          navigate("/");
+          toast.success("Deleted employee successfully");
+        })
+        .catch((e) => {
+          toast.error(e.message);
+        });
   };
 
   return (
