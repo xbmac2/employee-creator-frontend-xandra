@@ -17,7 +17,7 @@ const EmployeesList = ({ employees }: EmployeesListProps) => {
           return <EmployeeCard key={employee.id} employee={employee} />;
         })
       ) : (
-        <p>Could not load employees</p>
+        <p>Loading employees</p>
       )}
     </section>
   );
